@@ -828,15 +828,48 @@
       const content = games.map(item).join("");
       tickerEl.innerHTML = content + content; // duplicate for seamless loop
 
-      // ---- Notify form (front-end only placeholder) ----
+      // ---- Notify form (saves email to Google Sheet via Apps Script Web App) ----
+      // Replace with your deployed Apps Script Web App URL (ends in /exec)
+      const NOTIFY_ENDPOINT =
+        "https://script.google.com/macros/s/AKfycbyra2m0u4olR6ojrOLo3RmzxD0Ub69szbYEpm3jGqPdKAl9ClzON24UFW7WAp62avE_zw/exec";
+
       document
         .getElementById("notify-form")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
           e.preventDefault();
-          const email = document.getElementById("notify-email").value;
+          const form = this;
+          const emailInput = document.getElementById("notify-email");
+          const email = emailInput.value.trim();
           const msg = document.getElementById("notify-msg");
-          msg.textContent = `✓ You're on the list — we'll email ${email} when the arena opens.`;
-          this.reset();
+          const btn = form.querySelector("button");
+
+          if (!email) return;
+
+          btn.disabled = true;
+          const originalText = btn.textContent;
+          btn.textContent = "Saving...";
+          msg.style.color = "var(--teal)";
+          msg.textContent = "";
+
+          try {
+            await fetch(NOTIFY_ENDPOINT, {
+              method: "POST",
+              mode: "no-cors", // Apps Script Web Apps don't return CORS headers to fetch()
+              headers: { "Content-Type": "text/plain" }, // avoids CORS preflight
+              body: JSON.stringify({ email }),
+            });
+
+            // no-cors means we can't read the actual response — treat the request
+            // completing without a network error as success.
+            msg.textContent = `✓ You're on the list — we'll email ${email} when the arena opens.`;
+            form.reset();
+          } catch (err) {
+            msg.style.color = "var(--live)";
+            msg.textContent = `Something went wrong — please try again.`;
+          } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+          }
         });
     </script>
   </body>
