@@ -364,6 +364,154 @@
         }
       }
 
+      /* ---------- WEAPON STAGE ---------- */
+      .weapon-stage {
+        position: relative;
+        max-width: 720px;
+        margin: 36px auto 0;
+        border: 1px solid var(--panel-line);
+        background: var(--panel);
+        aspect-ratio: 16 / 6.2;
+      }
+      @media (min-width: 640px) {
+        .weapon-stage {
+          margin-top: 44px;
+        }
+      }
+      .weapon-stage::before,
+      .weapon-stage::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border: 2px solid var(--gold);
+      }
+      .weapon-stage::before {
+        top: -2px;
+        left: -2px;
+        border-right: none;
+        border-bottom: none;
+      }
+      .weapon-stage::after {
+        bottom: -2px;
+        right: -2px;
+        border-left: none;
+        border-top: none;
+      }
+      .weapon-tag {
+        position: absolute;
+        top: 10px;
+        left: 14px;
+        font-family: "JetBrains Mono";
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .weapon-tag.right {
+        left: auto;
+        right: 14px;
+        color: var(--live);
+      }
+      .weapon-svg {
+        width: 76%;
+        max-width: 520px;
+      }
+      .weapon-body {
+        animation: recoil 3.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+        transform-origin: 68% 60%;
+      }
+      @keyframes recoil {
+        0%,
+        76%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        78% {
+          transform: translate(-13px, 3px) rotate(-2.2deg);
+        }
+        84% {
+          transform: translate(3px, -2px) rotate(0.5deg);
+        }
+        90% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+      }
+      .muzzle-flash {
+        opacity: 0;
+        transform-origin: left center;
+        transform: scale(0.5);
+        animation: flash 3.4s ease infinite;
+      }
+      @keyframes flash {
+        0%,
+        76%,
+        100% {
+          opacity: 0;
+          transform: scale(0.4);
+        }
+        78% {
+          opacity: 1;
+          transform: scale(1.15) rotate(6deg);
+        }
+        81% {
+          opacity: 0.55;
+          transform: scale(0.85) rotate(-4deg);
+        }
+        84% {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+      }
+      .shell-casing {
+        opacity: 0;
+        animation: eject 3.4s ease infinite;
+      }
+      @keyframes eject {
+        0%,
+        77% {
+          opacity: 0;
+          transform: translate(0, 0) rotate(0deg);
+        }
+        79% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(44px, -40px) rotate(240deg);
+        }
+      }
+      .tracer-line {
+        stroke-dasharray: 300;
+        stroke-dashoffset: 300;
+        animation: tracer 3.4s linear infinite;
+      }
+      @keyframes tracer {
+        0%,
+        76% {
+          stroke-dashoffset: 300;
+          opacity: 0;
+        }
+        78% {
+          opacity: 1;
+        }
+        84% {
+          stroke-dashoffset: 0;
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .weapon-body,
+        .muzzle-flash,
+        .shell-casing,
+        .tracer-line {
+          animation: none !important;
+        }
+      }
+
       .scoreboard {
         display: flex;
         justify-content: center;
@@ -995,6 +1143,34 @@
           in one place.
         </p>
 
+        <div class="weapon-stage">
+          <div class="weapon-tag">CAM_02 // ARMORY</div>
+          <div class="weapon-tag right">REC ●</div>
+          <svg class="weapon-svg" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto;">
+            <line class="tracer-line" x1="330" y1="70" x2="400" y2="60" stroke="#f2b705" stroke-width="2" opacity="0"/>
+            <g class="weapon-body" fill="none" stroke="#ecedee" stroke-width="2.5" stroke-linejoin="round">
+              <path d="M40 108 L78 108 L78 92 L100 88 L100 118 L52 128 Z" fill="#0b0d10"/>
+              <path d="M108 118 L122 118 L128 150 L112 152 Z" fill="#0b0d10"/>
+              <path d="M112 122 Q100 138 116 144" fill="none"/>
+              <path d="M100 88 L215 84 L218 108 L100 112 Z" fill="#14171c"/>
+              <path d="M150 112 L170 112 L162 158 L146 152 Z" fill="#0b0d10"/>
+              <rect x="140" y="74" width="60" height="8" fill="#14171c"/>
+              <rect x="160" y="60" width="14" height="16" fill="#14171c"/>
+              <path d="M215 100 L215 122 L226 122 L226 100 Z" fill="#0b0d10"/>
+              <rect x="215" y="90" width="110" height="10" fill="#1b1f26"/>
+              <rect x="320" y="86" width="18" height="18" fill="#0b0d10"/>
+            </g>
+            <g class="muzzle-flash">
+              <polygon points="338,95 372,95 350,80 350,110" fill="#f2b705" opacity="0.9"/>
+              <polygon points="338,95 366,84 348,95" fill="#fff2c2"/>
+              <circle cx="340" cy="95" r="6" fill="#fff7d6"/>
+            </g>
+            <g class="shell-casing" transform="translate(200,90)">
+              <rect x="0" y="0" width="6" height="12" fill="#1fb6a6"/>
+            </g>
+          </svg>
+        </div>
+
         <div class="scoreboard mono" id="countdown">
           <div class="clock-unit">
             <div class="clock-num" id="cd-days">00</div>
@@ -1202,7 +1378,7 @@
         });
       });
 
-      const launchDate = new Date("2026-08-15T18:00:00");
+      const launchDate = new Date("2026-08-29T00:00:00+05:30");
       const dateFmt = launchDate.toLocaleDateString("en-US", {
         weekday: "long",
         month: "long",
